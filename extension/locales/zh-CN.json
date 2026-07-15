@@ -1,0 +1,7 @@
+{
+  "agent.name": "CodeBuddy Code",
+  "agent.description": "通过标准 ACP 使用腾讯 CodeBuddy Code",
+  "runtime.install.title": "在当前项目安装 CodeBuddy Code",
+  "runtime.install.description": "将固定版本运行时安装到 Tutti 管理的目录。",
+  "runtime.authRequired": "请先完成 CodeBuddy Code 的身份认证。"
+}

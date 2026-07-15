@@ -1,0 +1,7 @@
+{
+  "agent.name": "CodeBuddy Code",
+  "agent.description": "Tencent CodeBuddy Code through the Agent Client Protocol",
+  "runtime.install.title": "Install CodeBuddy Code in this project",
+  "runtime.install.description": "Installs the pinned runtime in Tutti's managed directory.",
+  "runtime.authRequired": "Authenticate CodeBuddy Code before starting a session."
+}
