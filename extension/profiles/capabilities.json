@@ -6,6 +6,8 @@
     "embeddedContext": true,
     "interrupt": true,
     "resume": true,
+    "compact": true,
+    "planMode": true,
     "permissionModes": true,
     "modelSelection": true
   }

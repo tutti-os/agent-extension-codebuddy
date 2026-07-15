@@ -35,7 +35,17 @@ PERMISSION_SEMANTICS = {
     "read-only",
     "ask-before-write",
     "accept-edits",
+    "auto",
+    "locked-down",
     "full-access",
+}
+SLASH_COMMAND_EFFECTS = {
+    "submitImmediate",
+    "showReviewPicker",
+    "activateGoalMode",
+    "togglePlanMode",
+    "showStatus",
+    "toggleSpeed",
 }
 
 
@@ -254,6 +264,38 @@ def validate_composer_profile(profile: dict[str, Any]) -> bool:
         runtime_ids.add(runtime_id)
         if mode.get("semantic") not in PERMISSION_SEMANTICS:
             raise ValidationError(f"{field}.semantic is unsupported")
+    slash_commands = profile.get("slashCommands")
+    if slash_commands is not None:
+        if not isinstance(slash_commands, dict):
+            raise ValidationError("composer.slashCommands must be an object")
+        if not isinstance(
+            slash_commands.get("commandCatalogAuthoritative"), bool
+        ):
+            raise ValidationError(
+                "composer.slashCommands.commandCatalogAuthoritative must be boolean"
+            )
+        commands = slash_commands.get("commands")
+        if not isinstance(commands, list) or not commands:
+            raise ValidationError(
+                "composer.slashCommands.commands must be a non-empty array"
+            )
+        command_names: set[str] = set()
+        for index, command in enumerate(commands):
+            field = f"composer.slashCommands.commands[{index}]"
+            if not isinstance(command, dict):
+                raise ValidationError(f"{field} must be an object")
+            name = require_string(command.get("name"), f"{field}.name").strip()
+            if name.startswith("/") or any(character.isspace() for character in name):
+                raise ValidationError(f"{field}.name must be a bare command name")
+            normalized_name = name.lower()
+            if normalized_name in command_names:
+                raise ValidationError(f"{field}.name must be unique")
+            command_names.add(normalized_name)
+            effect = command.get("effect")
+            if effect is not None:
+                effect = require_string(effect, f"{field}.effect")
+                if effect not in SLASH_COMMAND_EFFECTS:
+                    raise ValidationError(f"{field}.effect is unsupported")
     skills = profile.get("skills")
     if skills is None:
         return False

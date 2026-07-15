@@ -16,12 +16,45 @@
       "semantic": "accept-edits"
     },
     {
+      "runtimeId": "auto",
+      "semantic": "auto"
+    },
+    {
+      "runtimeId": "dontAsk",
+      "semantic": "locked-down"
+    },
+    {
       "runtimeId": "bypassPermissions",
+      "semantic": "full-access"
+    },
+    {
+      "runtimeId": "fullAccess",
       "semantic": "full-access"
     },
     {
       "runtimeId": "plan",
       "semantic": "read-only"
     }
-  ]
+  ],
+  "slashCommands": {
+    "commandCatalogAuthoritative": true,
+    "commands": [
+      {
+        "name": "compact",
+        "effect": "submitImmediate"
+      },
+      {
+        "name": "status",
+        "effect": "showStatus"
+      },
+      {
+        "name": "goal",
+        "effect": "activateGoalMode"
+      },
+      {
+        "name": "plan",
+        "effect": "togglePlanMode"
+      }
+    ]
+  }
 }
