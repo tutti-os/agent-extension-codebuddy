@@ -10,7 +10,7 @@
   },
   "heroImage": {
     "type": "asset",
-    "src": "assets/hero-image.png"
+    "src": "assets/hero-image.jpg"
   },
   "runtime": {
     "kind": "standard-acp",
