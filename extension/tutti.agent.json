@@ -1,16 +1,16 @@
 {
-  "schemaVersion": "tutti.agent.manifest.v1",
+  "schemaVersion": "tutti.agent.manifest.v2",
   "agentKey": "codebuddy",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "name": "CodeBuddy Code",
   "description": "Tencent CodeBuddy Code through the Agent Client Protocol",
   "icon": {
     "type": "asset",
     "src": "assets/icon.svg"
   },
-  "sidebarIcon": {
+  "maskIcon": {
     "type": "asset",
-    "src": "assets/sidebar-icon.svg"
+    "src": "assets/mask-icon.svg"
   },
   "heroImage": {
     "type": "asset",

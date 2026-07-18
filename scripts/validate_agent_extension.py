@@ -13,7 +13,7 @@ import sys
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-MANIFEST_SCHEMA = "tutti.agent.manifest.v1"
+MANIFEST_SCHEMA = "tutti.agent.manifest.v2"
 PROFILE_SCHEMAS = {
     "discovery": "tutti.agent.discovery.v1",
     "tools": "tutti.agent.tools.v1",
@@ -351,8 +351,8 @@ def validate(root: Path) -> None:
     check_install(runtime)
 
     validate_presentation_asset(root, manifest.get("icon"), "icon")
-    if manifest.get("sidebarIcon") is not None:
-        validate_presentation_asset(root, manifest.get("sidebarIcon"), "sidebarIcon")
+    if manifest.get("maskIcon") is not None:
+        validate_presentation_asset(root, manifest.get("maskIcon"), "maskIcon")
     validate_presentation_asset(root, manifest.get("heroImage"), "heroImage")
 
     profiles = manifest.get("profiles")

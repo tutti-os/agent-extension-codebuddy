@@ -5,7 +5,7 @@ const root = path.resolve(import.meta.dirname, '..');
 execFileSync(process.execPath, [path.join(root, 'scripts', 'package.mjs')], { stdio: 'inherit' });
 const packageDir = path.join(root, 'build', 'tutti-agent', 'package');
 const manifest = JSON.parse(await readFile(path.join(packageDir, 'tutti.agent.json'), 'utf8'));
-if (manifest.schemaVersion !== 'tutti.agent.manifest.v1' || manifest.agentKey !== 'codebuddy') throw new Error('invalid manifest identity');
+if (manifest.schemaVersion !== 'tutti.agent.manifest.v2' || manifest.agentKey !== 'codebuddy') throw new Error('invalid manifest identity');
 await rejectExecutables(packageDir);
 async function rejectExecutables(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {

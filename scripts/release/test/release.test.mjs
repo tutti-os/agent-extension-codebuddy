@@ -80,7 +80,7 @@ async function writeFixture(packageDir) {
     path.join(packageDir, "tutti.agent.json"),
     `${JSON.stringify(
       {
-        schemaVersion: "tutti.agent.manifest.v1",
+        schemaVersion: "tutti.agent.manifest.v2",
         agentKey: "gemini",
         version: "1.0.0",
         name: "Gemini CLI",
