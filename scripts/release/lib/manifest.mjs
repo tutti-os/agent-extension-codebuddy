@@ -65,6 +65,9 @@ export function validateManifest(manifest, expectedAgentKey) {
     requireString(manifest.description, "manifest description");
   }
   validateIcon(manifest.icon);
+  if (manifest.sidebarIcon !== undefined) {
+    validateSidebarIcon(manifest.sidebarIcon);
+  }
   if (manifest.heroImage !== undefined) {
     validateHeroImage(manifest.heroImage);
   }
@@ -90,6 +93,17 @@ function validateHeroImage(heroImage) {
     throw new Error("manifest heroImage.type must be asset");
   }
   requireRelativePath(heroImage.src, "manifest heroImage.src");
+}
+
+function validateSidebarIcon(sidebarIcon) {
+  if (
+    !sidebarIcon ||
+    typeof sidebarIcon !== "object" ||
+    sidebarIcon.type !== "asset"
+  ) {
+    throw new Error("manifest sidebarIcon.type must be asset");
+  }
+  requireRelativePath(sidebarIcon.src, "manifest sidebarIcon.src");
 }
 
 function validateRuntime(runtime) {
@@ -208,6 +222,7 @@ function validateLocalizationInfo(localizationInfo) {
 async function validateReferencedFiles(packageDir, manifest) {
   const references = [
     [manifest.icon.src, null],
+    ...(manifest.sidebarIcon ? [[manifest.sidebarIcon.src, null]] : []),
     ...(manifest.heroImage ? [[manifest.heroImage.src, null]] : []),
     [manifest.localizationInfo.defaultFile, null],
     ...(manifest.localizationInfo.additionalLocales ?? []).map((entry) => [
