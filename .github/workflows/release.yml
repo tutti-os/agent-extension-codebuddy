@@ -6,7 +6,10 @@ on:
       version:
         description: Immutable extension version
         required: true
-        default: "1.0.0"
+        default: "2.0.1"
+      min_tutti_version:
+        description: Oldest verified Tutti version that accepts this package contract
+        required: true
 
 permissions:
   contents: read
@@ -15,7 +18,7 @@ permissions:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   AGENT_KEY: codebuddy
-  MIN_TUTTI_VERSION: "0.0.0"
+  MIN_TUTTI_VERSION: ${{ inputs.min_tutti_version }}
   SIGNING_KEY_ID: tutti-codebuddy-release-v1
   S3_PREFIX: tutti-agent-releases
   RELEASE_ASSETS_BASE_URL: https://d1x7gb6wqsqmnm.cloudfront.net/tutti-agent-releases
@@ -63,11 +66,14 @@ jobs:
         env:
           TUTTI_AGENT_EXTENSION_SIGNING_PRIVATE_KEY: ${{ secrets.TUTTI_AGENT_EXTENSION_SIGNING_PRIVATE_KEY }}
         run: |
+          published_at="$(git show -s --format=%cI HEAD)"
           node scripts/release/bin/build-tutti-agent-extension-release.mjs \
             --agent-key "${AGENT_KEY}" \
             --package-dir build/tutti-agent/package \
             --output-dir dist/tutti-agent-extension-release \
             --version "${{ inputs.version }}" \
+            --published-at "${published_at}" \
+            --git-sha "${GITHUB_SHA}" \
             --base-url "${RELEASE_ASSETS_BASE_URL}" \
             --signing-key-id "${SIGNING_KEY_ID}"
 
