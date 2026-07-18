@@ -351,6 +351,8 @@ def validate(root: Path) -> None:
     check_install(runtime)
 
     validate_presentation_asset(root, manifest.get("icon"), "icon")
+    if manifest.get("sidebarIcon") is not None:
+        validate_presentation_asset(root, manifest.get("sidebarIcon"), "sidebarIcon")
     validate_presentation_asset(root, manifest.get("heroImage"), "heroImage")
 
     profiles = manifest.get("profiles")

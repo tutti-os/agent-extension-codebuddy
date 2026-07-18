@@ -8,6 +8,10 @@
     "type": "asset",
     "src": "assets/icon.svg"
   },
+  "sidebarIcon": {
+    "type": "asset",
+    "src": "assets/sidebar-icon.svg"
+  },
   "heroImage": {
     "type": "asset",
     "src": "assets/hero-image.jpg"
@@ -25,9 +29,7 @@
     },
     "launch": {
       "executable": "${installRoot}/node_modules/.bin/codebuddy",
-      "args": [
-        "--acp"
-      ]
+      "args": ["--acp"]
     }
   },
   "profiles": {
