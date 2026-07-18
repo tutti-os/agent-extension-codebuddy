@@ -8,7 +8,7 @@ import {
   requireString
 } from "./format.mjs";
 
-export const manifestSchemaVersion = "tutti.agent.manifest.v1";
+export const manifestSchemaVersion = "tutti.agent.manifest.v2";
 export const profileSchemas = Object.freeze({
   discovery: "tutti.agent.discovery.v1",
   tools: "tutti.agent.tools.v1",
@@ -65,8 +65,8 @@ export function validateManifest(manifest, expectedAgentKey) {
     requireString(manifest.description, "manifest description");
   }
   validateIcon(manifest.icon);
-  if (manifest.sidebarIcon !== undefined) {
-    validateSidebarIcon(manifest.sidebarIcon);
+  if (manifest.maskIcon !== undefined) {
+    validateMaskIcon(manifest.maskIcon);
   }
   if (manifest.heroImage !== undefined) {
     validateHeroImage(manifest.heroImage);
@@ -95,15 +95,15 @@ function validateHeroImage(heroImage) {
   requireRelativePath(heroImage.src, "manifest heroImage.src");
 }
 
-function validateSidebarIcon(sidebarIcon) {
+function validateMaskIcon(maskIcon) {
   if (
-    !sidebarIcon ||
-    typeof sidebarIcon !== "object" ||
-    sidebarIcon.type !== "asset"
+    !maskIcon ||
+    typeof maskIcon !== "object" ||
+    maskIcon.type !== "asset"
   ) {
-    throw new Error("manifest sidebarIcon.type must be asset");
+    throw new Error("manifest maskIcon.type must be asset");
   }
-  requireRelativePath(sidebarIcon.src, "manifest sidebarIcon.src");
+  requireRelativePath(maskIcon.src, "manifest maskIcon.src");
 }
 
 function validateRuntime(runtime) {
@@ -222,7 +222,7 @@ function validateLocalizationInfo(localizationInfo) {
 async function validateReferencedFiles(packageDir, manifest) {
   const references = [
     [manifest.icon.src, null],
-    ...(manifest.sidebarIcon ? [[manifest.sidebarIcon.src, null]] : []),
+    ...(manifest.maskIcon ? [[manifest.maskIcon.src, null]] : []),
     ...(manifest.heroImage ? [[manifest.heroImage.src, null]] : []),
     [manifest.localizationInfo.defaultFile, null],
     ...(manifest.localizationInfo.additionalLocales ?? []).map((entry) => [

@@ -16,7 +16,7 @@ Verify the real ACP runtime without sending a paid prompt:
 python3 scripts/probe_acp_runtime.py --cwd /path/to/project -- codebuddy --acp
 ```
 
-The signed manifest references the transparent conversation-row mask through `icon`, the colored shared Agent identity through `sidebarIcon`, and the home poster through `heroImage`. Tutti uses the sidebar artwork in the Provider Rail, conversation headers, Message Center, and mentions while the primary icon remains the mask-safe conversation glyph. The sidebar artwork crops the left 560×560 mark from CodeBuddy's official [WorkBuddy black lockup](https://download.codebuddy.cn/web/login/3fd66a24cf9c21a985b4fad85eb86b2c5bd5c974/assets/workbuddy-black.f5a45906.svg); it excludes the adjacent wordmark and remains local in the signed package. Keep each packaged image at or below 256 KiB and replace it deliberately when branding changes.
+The signed manifest references the colored shared Agent identity through `icon`, the transparent conversation-row glyph through `maskIcon`, and the home poster through `heroImage`. The primary artwork crops the left 560×560 mark from CodeBuddy's official [WorkBuddy black lockup](https://download.codebuddy.cn/web/login/3fd66a24cf9c21a985b4fad85eb86b2c5bd5c974/assets/workbuddy-black.f5a45906.svg); it excludes the adjacent wordmark and remains local in the signed package. Keep each packaged image at or below 256 KiB and replace it deliberately when branding changes.
 
 ## Release
 
