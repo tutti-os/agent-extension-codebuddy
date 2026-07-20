@@ -1,7 +1,7 @@
 {
   "schemaVersion": "tutti.agent.manifest.v2",
   "agentKey": "codebuddy",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "name": "CodeBuddy Code",
   "description": "Tencent CodeBuddy Code through the Agent Client Protocol",
   "icon": {
