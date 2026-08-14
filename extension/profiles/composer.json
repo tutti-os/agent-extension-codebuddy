@@ -48,10 +48,6 @@
         "effect": "showStatus"
       },
       {
-        "name": "goal",
-        "effect": "activateGoalMode"
-      },
-      {
         "name": "plan",
         "effect": "togglePlanMode"
       }
