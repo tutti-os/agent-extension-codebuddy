@@ -14,6 +14,7 @@ export const profileSchemas = Object.freeze({
   tools: "tutti.agent.tools.v1",
   capabilities: "tutti.agent.capabilities.v1",
   composer: "tutti.agent.composer.v1",
+  accountUsage: "tutti.agent.account-usage-probe.v1",
   events: "tutti.agent.events.v1"
 });
 

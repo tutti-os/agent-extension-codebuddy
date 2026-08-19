@@ -19,6 +19,7 @@ PROFILE_SCHEMAS = {
     "tools": "tutti.agent.tools.v1",
     "capabilities": "tutti.agent.capabilities.v1",
     "composer": "tutti.agent.composer.v1",
+    "accountUsage": "tutti.agent.account-usage-probe.v1",
 }
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$")
 EXACT_NPM_PACKAGE = re.compile(
@@ -240,6 +241,40 @@ def validate_skill_root(root: Any, index: int) -> None:
     require_safe_relative_path(root.get("path"), f"{field}.path")
 
 
+def validate_account_usage_profile(profile: dict[str, Any]) -> None:
+    runtime = profile.get("runtime")
+    if not isinstance(runtime, dict):
+        raise ValidationError("accountUsage.runtime must be an object")
+    package = require_string(runtime.get("package"), "accountUsage.runtime.package")
+    if not package.startswith("@") or not EXACT_NPM_PACKAGE.fullmatch(package):
+        raise ValidationError(
+            "accountUsage.runtime.package must use an exact scoped npm version"
+        )
+    if runtime.get("kind") != "node-script":
+        raise ValidationError("accountUsage.runtime.kind must be node-script")
+    script = require_string(runtime.get("script"), "accountUsage.runtime.script")
+    if not script.startswith("${installRoot}/") or any(
+        token in script
+        for token in ("|", ";", "&", "`", "\n", "\r", "<", ">", "$(")
+    ):
+        raise ValidationError(
+            "accountUsage.runtime.script must stay under installRoot"
+        )
+    args = require_string_array(
+        runtime.get("args"), "accountUsage.runtime.args", non_empty=True
+    )
+    if len(args) > 8:
+        raise ValidationError("accountUsage.runtime.args must contain 1..8 entries")
+    for index, argument in enumerate(args):
+        if len(argument) > 128 or any(
+            ord(character) < 32 or ord(character) == 127 for character in argument
+        ):
+            raise ValidationError(f"accountUsage.runtime.args[{index}] is invalid")
+    timeout_ms = runtime.get("timeoutMs")
+    if not isinstance(timeout_ms, int) or not 100 <= timeout_ms <= 30_000:
+        raise ValidationError("accountUsage.runtime.timeoutMs must be 100..30000")
+
+
 def validate_composer_profile(profile: dict[str, Any]) -> bool:
     model = profile.get("model")
     if not isinstance(model, dict) or model.get("source") != "acp-session-models":
@@ -323,6 +358,7 @@ def validate_profiles(profile_values: dict[str, dict[str, Any]]) -> None:
     validate_tools_profile(profile_values["tools"])
     capabilities = validate_capabilities_profile(profile_values["capabilities"])
     composer_has_skills = validate_composer_profile(profile_values["composer"])
+    validate_account_usage_profile(profile_values["accountUsage"])
     if bool(capabilities.get("skills")) != composer_has_skills:
         raise ValidationError(
             "capabilities.declared.skills must match the composer.skills declaration"

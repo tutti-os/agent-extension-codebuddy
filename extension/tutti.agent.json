@@ -1,7 +1,7 @@
 {
   "schemaVersion": "tutti.agent.manifest.v2",
   "agentKey": "codebuddy",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "name": "CodeBuddy Code",
   "description": "Tencent CodeBuddy Code through the Agent Client Protocol",
   "icon": {
@@ -36,7 +36,8 @@
     "discovery": "profiles/discovery.json",
     "tools": "profiles/tools.json",
     "capabilities": "profiles/capabilities.json",
-    "composer": "profiles/composer.json"
+    "composer": "profiles/composer.json",
+    "accountUsage": "profiles/account-usage.json"
   },
   "localizationInfo": {
     "defaultLocale": "en",

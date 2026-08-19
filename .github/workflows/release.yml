@@ -6,7 +6,7 @@ on:
       version:
         description: Immutable extension version
         required: true
-        default: "2.0.3"
+        default: "2.0.4"
       min_tutti_version:
         description: Oldest verified Tutti version that accepts this package contract
         required: true
@@ -58,6 +58,18 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Run repository checks
+        run: pnpm check
+
+      - name: Verify account usage helper is published
+        run: |
+          package_spec="$(node --input-type=module -e '
+            import fs from "node:fs";
+            const profile = JSON.parse(fs.readFileSync("extension/profiles/account-usage.json", "utf8"));
+            process.stdout.write(profile.runtime.package);
+          ')"
+          npm view "${package_spec}" version --json >/dev/null
 
       - name: Build extension package
         env:

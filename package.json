@@ -1,17 +1,20 @@
 {
   "name": "@tutti-os/agent-extension-codebuddy",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "check": "node scripts/check.mjs && python3 scripts/validate_agent_extension.py build/tutti-agent/package && node --test scripts/release/test/*.test.mjs",
+    "check": "node scripts/check.mjs && python3 scripts/validate_agent_extension.py build/tutti-agent/package && node --test scripts/release/test/*.test.mjs && pnpm --filter @tutti-os/codebuddy-account-usage-probe test",
     "package:tutti-agent": "node scripts/package.mjs"
   },
   "dependencies": {
     "semver": "7.8.0"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "esbuild": "0.27.7"
+  }
 }

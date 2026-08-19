@@ -11,7 +11,38 @@ jobs:
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: "24"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+  windows-account-usage:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @tutti-os/codebuddy-account-usage-probe test
+      - name: Install and probe the packed npm helper
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          $packRoot = Join-Path $env:RUNNER_TEMP 'codebuddy-account-usage-pack'
+          $installRoot = Join-Path $env:RUNNER_TEMP 'codebuddy-account-usage-install'
+          New-Item -ItemType Directory -Force -Path $packRoot | Out-Null
+          npm pack ./packages/account-usage-probe --pack-destination $packRoot
+          $archive = @(Get-ChildItem -Path $packRoot -Filter '*.tgz')
+          if ($archive.Count -ne 1) {
+            throw "Expected one packed account-usage helper, found $($archive.Count)"
+          }
+          npm install --prefix $installRoot --no-save --no-audit --no-fund $archive[0].FullName
+          $script = Join-Path $installRoot 'node_modules/@tutti-os/codebuddy-account-usage-probe/dist/cli.cjs'
+          $env:CODEBUDDY_API_KEY = 'windows-api-fixture'
+          $result = (Get-Content -Raw -Encoding UTF8 $script | & node --input-type=commonjs - --output json | ConvertFrom-Json)
+          if ($result.schemaVersion -ne 'tutti.agent.account-usage.v2' -or $result.outcome -ne 'available' -or $result.billingMode -ne 'api' -or $result.quotaState -ne 'not_applicable') {
+            throw "Unexpected account-usage probe result: $($result | ConvertTo-Json -Compress)"
+          }
