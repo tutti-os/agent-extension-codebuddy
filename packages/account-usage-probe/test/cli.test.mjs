@@ -18,7 +18,7 @@ test("published CLI runs through a fixed Node interpreter without leaking creden
     const secret = "sk-api-cli-secret";
     const { stdout, stderr } = await execFileAsync(
       process.execPath,
-      [snapshot, "--output", "json", "--authentication-id", "Tencent-Cloud.coding-copilot"],
+      [snapshot, "--output", "json"],
       { env: { ...process.env, CODEBUDDY_API_KEY: secret } },
     );
     assert.equal(stderr, "");

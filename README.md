@@ -5,12 +5,14 @@ Declarative Tutti integration for `@tencent-ai/codebuddy-code@2.121.2` through s
 The Extension declares an optional Provider-owned account-usage companion at
 `packages/account-usage-probe`. The signed Extension remains data-only; Tutti
 installs and verifies the companion independently from the ACP runtime. The
-companion owns CodeBuddy configuration, native-session lookup, credential
-refresh races, trusted account endpoints, pagination, and response conversion.
-It emits only the closed `tutti.agent.account-usage.v2` snapshot. Exact Credits
-are returned only when an unfiltered request collects every page and an explicit
-total proves completeness; otherwise the account type remains visible with an
-unavailable quota state.
+companion owns CodeBuddy configuration precedence and emits only the closed
+`tutti.agent.account-usage.v2` snapshot. The pinned Runtime does not expose a
+documented, complete account-balance contract, so Coding Plan and native
+CodeBuddy accounts report an unavailable quota without any exact Credits. The
+companion does not enumerate or read native session files, decode JWTs, execute
+credential helpers, or call private billing endpoints. Exact Credits may be
+added only after the Provider publishes a contract that proves the snapshot is
+complete.
 
 ## Validate
 

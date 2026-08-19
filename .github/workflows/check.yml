@@ -42,7 +42,7 @@ jobs:
           npm install --prefix $installRoot --no-save --no-audit --no-fund $archive[0].FullName
           $script = Join-Path $installRoot 'node_modules/@tutti-os/codebuddy-account-usage-probe/dist/cli.cjs'
           $env:CODEBUDDY_API_KEY = 'windows-api-fixture'
-          $result = (Get-Content -Raw -Encoding UTF8 $script | & node --input-type=commonjs - --output json --authentication-id Tencent-Cloud.coding-copilot | ConvertFrom-Json)
+          $result = (Get-Content -Raw -Encoding UTF8 $script | & node --input-type=commonjs - --output json | ConvertFrom-Json)
           if ($result.schemaVersion -ne 'tutti.agent.account-usage.v2' -or $result.outcome -ne 'available' -or $result.billingMode -ne 'api' -or $result.quotaState -ne 'not_applicable') {
             throw "Unexpected account-usage probe result: $($result | ConvertTo-Json -Compress)"
           }

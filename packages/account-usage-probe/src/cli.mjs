@@ -11,11 +11,7 @@ function executionFailedResult() {
 }
 
 function parseArguments(args) {
-  if (args.length !== 4) return null;
-  if (args[0] !== "--output" || args[1] !== "json") return null;
-  if (args[2] !== "--authentication-id") return null;
-  const authenticationId = args[3]?.trim() ?? "";
-  return /^[A-Za-z0-9._-]{1,128}$/u.test(authenticationId) ? { authenticationId } : null;
+  return args.length === 2 && args[0] === "--output" && args[1] === "json" ? {} : null;
 }
 
 async function main() {

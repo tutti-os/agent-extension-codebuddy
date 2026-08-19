@@ -6,9 +6,7 @@
     "script": "${installRoot}/node_modules/@tutti-os/codebuddy-account-usage-probe/dist/cli.cjs",
     "args": [
       "--output",
-      "json",
-      "--authentication-id",
-      "Tencent-Cloud.coding-copilot"
+      "json"
     ],
     "timeoutMs": 20000
   }
