@@ -1,0 +1,56 @@
+name: Publish CodeBuddy Account Usage Probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Immutable helper package version
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+        with:
+          version: 10.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify requested version
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const manifest = JSON.parse(fs.readFileSync("packages/account-usage-probe/package.json", "utf8"));
+            if (manifest.version !== process.env.REQUESTED_VERSION) {
+              throw new Error(`requested ${process.env.REQUESTED_VERSION} does not match package ${manifest.version}`);
+            }
+          '
+
+      - name: Test helper
+        run: pnpm --filter @tutti-os/codebuddy-account-usage-probe test
+
+      - name: Publish helper
+        run: npm publish ./packages/account-usage-probe --access public --provenance

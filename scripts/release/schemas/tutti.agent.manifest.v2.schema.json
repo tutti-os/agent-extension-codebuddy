@@ -82,6 +82,7 @@
         "tools": { "type": "string" },
         "capabilities": { "type": "string" },
         "composer": { "type": "string" },
+        "accountUsage": { "type": "string" },
         "events": { "type": "string" }
       }
     },

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "tutti.agent.account-usage-probe.v1",
+  "runtime": {
+    "package": "@tutti-os/codebuddy-account-usage-probe@0.1.0",
+    "kind": "node-script",
+    "script": "${installRoot}/node_modules/@tutti-os/codebuddy-account-usage-probe/dist/cli.cjs",
+    "args": [
+      "--output",
+      "json",
+      "--authentication-id",
+      "Tencent-Cloud.coding-copilot"
+    ],
+    "timeoutMs": 20000
+  }
+}
