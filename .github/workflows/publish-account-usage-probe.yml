@@ -53,4 +53,6 @@ jobs:
         run: pnpm --filter @tutti-os/codebuddy-account-usage-probe test
 
       - name: Publish helper
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish ./packages/account-usage-probe --access public --provenance

@@ -19,16 +19,16 @@ test("extension release requires the pinned account usage helper", async () => {
   );
 });
 
-test("account usage helper publication uses scoped trusted publishing", async () => {
+test("account usage helper publication uses the organization npm token", async () => {
   const workflow = await readFile(
     path.join(repositoryRoot, ".github/workflows/publish-account-usage-probe.yml"),
     "utf8",
   );
   assert.match(workflow, /id-token: write/u);
   assert.match(workflow, /environment: npm/u);
+  assert.match(workflow, /NODE_AUTH_TOKEN: \$\{\{ secrets\.NPM_TOKEN \}\}/u);
   assert.match(
     workflow,
     /npm publish \.\/packages\/account-usage-probe --access public --provenance/u,
   );
-  assert.doesNotMatch(workflow, /NODE_AUTH_TOKEN|NPM_TOKEN/u);
 });
