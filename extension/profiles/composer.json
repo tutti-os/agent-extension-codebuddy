@@ -6,6 +6,18 @@
   "permission": {
     "source": "acp-session-modes"
   },
+  "configOptions": {
+    "model": {
+      "acpOptionId": "model",
+      "descriptionMetadataFormat": "credit-consumption-multiplier-v1"
+    },
+    "permission": {
+      "acpOptionId": "mode"
+    },
+    "reasoning": {
+      "acpOptionId": "reasoning_effort"
+    }
+  },
   "permissionModes": [
     {
       "runtimeId": "default",
