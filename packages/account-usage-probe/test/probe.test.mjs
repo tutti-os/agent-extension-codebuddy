@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import path from "node:path";
 import test from "node:test";
 import { probeCodeBuddyAccountUsage } from "../src/probe.mjs";
 
@@ -77,6 +78,8 @@ test("native auth token classifies the account without calling a private endpoin
 test("expired and valid stored sessions coexist without either becoming usage authority", async () => {
   const reads = [];
   let fetchCount = 0;
+  const configDirectory = path.resolve(path.sep, "config");
+  const settingsPath = path.join(configDirectory, "settings.json");
   const sessionFiles = new Map([
     [
       "/home/test/.local/share/CodeBuddyExtension/Data/Public/auth/aaa-expired.info",
@@ -89,7 +92,7 @@ test("expired and valid stored sessions coexist without either becoming usage au
   ]);
 
   const result = await probeCodeBuddyAccountUsage({
-    env: { CODEBUDDY_CONFIG_DIR: "/config" },
+    env: { CODEBUDDY_CONFIG_DIR: configDirectory },
     fetch: async () => {
       fetchCount += 1;
       throw new Error("must not be called");
@@ -97,7 +100,7 @@ test("expired and valid stored sessions coexist without either becoming usage au
     homeDirectory: () => "/home/test",
     readFile: async (filePath) => {
       reads.push(filePath);
-      if (filePath === "/config/settings.json") return "{}";
+      if (filePath === settingsPath) return "{}";
       if (sessionFiles.has(filePath)) return sessionFiles.get(filePath);
       throw notFound();
     },
@@ -105,7 +108,7 @@ test("expired and valid stored sessions coexist without either becoming usage au
   });
 
   assert.deepEqual(result, availableResult("provider_account", "unavailable"));
-  assert.deepEqual(reads, ["/config/settings.json"]);
+  assert.deepEqual(reads, [settingsPath]);
   assert.equal(fetchCount, 0);
   assert.equal(JSON.stringify(result).includes("expired-secret"), false);
   assert.equal(JSON.stringify(result).includes("valid-secret"), false);

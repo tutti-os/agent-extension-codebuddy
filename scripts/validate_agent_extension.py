@@ -48,6 +48,7 @@ SLASH_COMMAND_EFFECTS = {
     "showStatus",
     "toggleSpeed",
 }
+MODEL_DESCRIPTION_METADATA_FORMAT = "credit-consumption-multiplier-v1"
 
 
 class ValidationError(Exception):
@@ -285,6 +286,38 @@ def validate_composer_profile(profile: dict[str, Any]) -> bool:
         or permission.get("source") != "acp-session-modes"
     ):
         raise ValidationError("composer.permission.source must be acp-session-modes")
+    config_options = profile.get("configOptions")
+    if not isinstance(config_options, dict):
+        raise ValidationError("composer.configOptions must be an object")
+    model_option = config_options.get("model")
+    if (
+        not isinstance(model_option, dict)
+        or model_option.get("acpOptionId") != "model"
+    ):
+        raise ValidationError("composer.configOptions.model.acpOptionId must be model")
+    if (
+        model_option.get("descriptionMetadataFormat")
+        != MODEL_DESCRIPTION_METADATA_FORMAT
+    ):
+        raise ValidationError(
+            "composer.configOptions.model.descriptionMetadataFormat is unsupported"
+        )
+    permission_option = config_options.get("permission")
+    if (
+        not isinstance(permission_option, dict)
+        or permission_option.get("acpOptionId") != "mode"
+    ):
+        raise ValidationError(
+            "composer.configOptions.permission.acpOptionId must be mode"
+        )
+    reasoning_option = config_options.get("reasoning")
+    if (
+        not isinstance(reasoning_option, dict)
+        or reasoning_option.get("acpOptionId") != "reasoning_effort"
+    ):
+        raise ValidationError(
+            "composer.configOptions.reasoning.acpOptionId must be reasoning_effort"
+        )
     modes = profile.get("permissionModes")
     if not isinstance(modes, list):
         raise ValidationError("composer.permissionModes must be an array")
