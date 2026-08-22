@@ -9,6 +9,8 @@
     "compact": true,
     "planMode": true,
     "permissionModes": true,
-    "modelSelection": true
+    "modelSelection": true,
+    "computerUse": true,
+    "skills": true
   }
 }

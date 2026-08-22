@@ -6,6 +6,11 @@ execFileSync(process.execPath, [path.join(root, 'scripts', 'package.mjs')], { st
 const packageDir = path.join(root, 'build', 'tutti-agent', 'package');
 const manifest = JSON.parse(await readFile(path.join(packageDir, 'tutti.agent.json'), 'utf8'));
 if (manifest.schemaVersion !== 'tutti.agent.manifest.v2' || manifest.agentKey !== 'codebuddy') throw new Error('invalid manifest identity');
+const capabilities = JSON.parse(await readFile(path.join(packageDir, manifest.profiles.capabilities), 'utf8')).declared;
+const composer = JSON.parse(await readFile(path.join(packageDir, manifest.profiles.composer), 'utf8'));
+const expectedSkillRoots = ['workspace:.codebuddy/skills', 'user:.codebuddy/skills'];
+const actualSkillRoots = composer.skills?.roots?.map((entry) => `${entry.scope}:${entry.path}`);
+if (capabilities.skills !== true || capabilities.computerUse !== true || composer.skills?.invocation !== 'textTrigger' || composer.skills?.triggerPrefix !== '/' || JSON.stringify(actualSkillRoots) !== JSON.stringify(expectedSkillRoots)) throw new Error('computer use requires the pinned CodeBuddy Skill contract');
 await rejectExecutables(packageDir);
 async function rejectExecutables(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {

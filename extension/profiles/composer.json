@@ -68,5 +68,19 @@
         "effect": "togglePlanMode"
       }
     ]
+  },
+  "skills": {
+    "invocation": "textTrigger",
+    "triggerPrefix": "/",
+    "roots": [
+      {
+        "scope": "workspace",
+        "path": ".codebuddy/skills"
+      },
+      {
+        "scope": "user",
+        "path": ".codebuddy/skills"
+      }
+    ]
   }
 }
