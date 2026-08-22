@@ -14,6 +14,16 @@ credential helpers, or call private billing endpoints. Exact Credits may be
 added only after the Provider publishes a contract that proves the snapshot is
 complete.
 
+The Extension declares `skills` and `computerUse` from the pinned 2.121.2
+Runtime contract. Its packaged changelog documents workspace
+`.codebuddy/skills/*/SKILL.md`, user `~/.codebuddy/skills`, direct
+`/skill-name` invocation, and ACP-mode Skill exposure. Tutti materializes its
+host-owned computer-use Skill into the declared workspace root; computer-driver
+readiness and the user setting remain host gates. This does not claim a
+Provider-native desktop tool. The Runtime also contains `.agents/skills`
+handling, but that root is intentionally omitted because its packaged
+documentation does not establish the same complete discovery contract.
+
 ## Validate
 
 ```sh
